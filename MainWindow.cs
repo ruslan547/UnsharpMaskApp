@@ -12,7 +12,7 @@ using UnsharpMaskApp.Core;
 namespace UnsharpMaskApp;
 
 /// <summary>Главное окно. Все обработчики выполняются в UI-потоке, длительные операции - асинхронно.</summary>
-public sealed partial class MainWindow : Window
+public sealed class MainWindow : Window
 {
     private readonly Button _openButton = new() { Content = "Открыть..." };
     private readonly Button _startButton = new() { Content = "Обработать" };
@@ -40,7 +40,6 @@ public sealed partial class MainWindow : Window
     private ImageBuffer? _result;
     private string? _sourcePath;
     private CancellationTokenSource? _cts;
-    private Action<PipelineProgress>? _progressHook;
 
     public MainWindow()
     {
@@ -179,7 +178,6 @@ public sealed partial class MainWindow : Window
         {
             _progress.Value = 100.0 * p.Done / p.Total;
             _progressText.Text = $"Собрано фрагментов: {p.Done} из {p.Total}";
-            _progressHook?.Invoke(p);
         });
 
         var sw = Stopwatch.StartNew();
